@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <path id="tA" d="M 45 150 A 106 106 0 0 1 255 150"/>
+    <path id="bA" d="M 45 150 A 106 106 0 0 0 255 150"/>
+    <clipPath id="dc"><circle cx="150" cy="150" r="122"/></clipPath>
+  </defs>
+  <circle cx="150" cy="150" r="139" fill="#F4EEE0"/>
+  <circle cx="150" cy="150" r="139" fill="none" stroke="#1C3A31" stroke-width="7"/>
+  <circle cx="150" cy="150" r="124" fill="none" stroke="#1C3A31" stroke-width="2"/>
+  <g clip-path="url(#dc)"><g transform="translate(53,98.25) scale(0.5)">
+  <path fill="#17171A" stroke="#1C3A31" stroke-width="1.2" d="M 30 96 L 42 80 L 152 80 L 152 96 Z"/>
+  <rect x="30" y="96" width="122" height="74" fill="#F4EEE0" stroke="#1C3A31" stroke-width="1.2"/>
+  <rect x="140" y="96" width="12" height="74" fill="#E3D9C4"/>
+  <rect x="76" y="120" width="28" height="50" fill="#0E0E0E" stroke="#1C3A31" stroke-width="1"/>
+  <g fill="#141414" stroke="#1C3A31" stroke-width="0.8">
+    <rect x="44" y="106" width="12" height="12"/><rect x="62" y="106" width="12" height="12"/>
+    <rect x="118" y="106" width="12" height="12"/><rect x="134" y="106" width="12" height="12"/></g>
+  <path fill="#17171A" stroke="#1C3A31" stroke-width="1.2" d="M 255 92 L 295 70 L 335 92 Z"/>
+  <line x1="255" y1="92" x2="295" y2="70" stroke="#3a3a3a" stroke-width="0.8"/>
+  <rect x="255" y="92" width="80" height="78" fill="#F4EEE0" stroke="#1C3A31" stroke-width="1.2"/>
+  <rect x="323" y="92" width="12" height="78" fill="#E3D9C4"/>
+  <circle cx="295" cy="84" r="4" fill="#141414"/>
+  <g fill="#141414" stroke="#1C3A31" stroke-width="0.8">
+    <rect x="264" y="100" width="12" height="14"/><rect x="284" y="100" width="12" height="14"/><rect x="304" y="100" width="12" height="14"/>
+    <rect x="264" y="126" width="12" height="18"/><rect x="284" y="126" width="12" height="18"/><rect x="304" y="126" width="12" height="18"/></g>
+  <path fill="#17171A" stroke="#1C3A31" stroke-width="1.3" d="M 150 66 L 182 40 L 228 40 L 260 66 Z"/>
+  <line x1="150" y1="66" x2="182" y2="40" stroke="#3a3a3a" stroke-width="0.9"/>
+  <line x1="260" y1="66" x2="228" y2="40" stroke="#3a3a3a" stroke-width="0.9"/>
+  <rect x="155" y="66" width="100" height="104" fill="#F4EEE0" stroke="#1C3A31" stroke-width="1.4"/>
+  <rect x="246" y="66" width="9" height="104" fill="#E3D9C4"/>
+  <rect x="152" y="66" width="106" height="4.5" fill="#E3D9C4" stroke="#1C3A31" stroke-width="0.6"/>
+  <line x1="155" y1="112" x2="255" y2="112" stroke="#1C3A31" stroke-width="1.4"/>
+  <g fill="#141414" stroke="#1C3A31" stroke-width="0.9">
+    <rect x="160" y="82" width="11" height="22"/><rect x="180" y="82" width="11" height="22"/>
+    <rect x="200" y="82" width="11" height="22"/><rect x="220" y="82" width="11" height="22"/><rect x="240" y="82" width="11" height="22"/></g>
+  <rect x="160" y="128" width="13" height="26" fill="#141414" stroke="#1C3A31" stroke-width="0.9"/>
+  <rect x="238" y="128" width="13" height="26" fill="#141414" stroke="#1C3A31" stroke-width="0.9"/>
+  <g fill="#0E0E0E" stroke="#1C3A31" stroke-width="1">
+    <path d="M 181 170 L 181 150 A 7 7 0 0 1 195 150 L 195 170 Z"/>
+    <path d="M 198 170 L 198 145 A 7.5 7.5 0 0 1 213 145 L 213 170 Z"/>
+    <path d="M 216 170 L 216 150 A 7 7 0 0 1 230 150 L 230 170 Z"/></g>
+  <rect x="139" y="34" width="2.4" height="136" fill="#1C3A31"/>
+  <path fill="#1C3A31" d="M 141.4 36 C 150 39 158 33 166 36 C 158 42 150 40 141.4 48 Z"/>
+  <rect x="356" y="118" width="2" height="52" fill="#1C3A31"/>
+  <path stroke="#1C3A31" stroke-width="1.2" fill="none" d="M357 130 L349 121 M357 137 L365 128 M357 145 L348 139 M357 152 L365 146"/>
+  <rect x="0" y="170" width="380" height="3" fill="#1C3A31"/>
+  <g stroke="#1C3A31" stroke-width="1.1" opacity="0.8">
+    <path d="M18 170 l2 -6 M22 170 l-1 -5 M115 170 l2 -6 M119 170 l-1 -5 M240 170 l2 -6 M244 170 l-1 -5 M330 170 l2 -6 M334 170 l-1 -5"/></g>
+</g></g>
+  <text font-family="Georgia,serif" font-weight="700" font-size="25" letter-spacing="3" fill="#1C3A31"><textPath href="#tA" startOffset="50%" text-anchor="middle">CONTRADA SUD</textPath></text>
+  <text font-family="Georgia,serif" font-weight="700" font-size="16" letter-spacing="4" fill="#1C3A31"><textPath href="#bA" startOffset="50%" text-anchor="middle">BORGO CARSO</textPath></text>
+  <path d="M 26 150 l 6 -6 l 6 6 l -6 6 z" fill="#1C3A31"/>
+  <path d="M 262 150 l 6 -6 l 6 6 l -6 6 z" fill="#1C3A31"/>
+</svg>

@@ -1,9 +1,9 @@
 const defaultData = {
   teams: [
-    { id: 'nord', name: 'Nord', color: '#277a93' },
-    { id: 'sud', name: 'Sud', color: '#a6373e' },
-    { id: 'centro-storico', name: 'Centro Storico', color: '#557a48' },
-    { id: 'palazzoni', name: 'Palazzoni', color: '#d19434' }
+    { id: 'nord', name: 'Nord', color: '#277a93', logo: 'assets/loghi/nord.svg' },
+    { id: 'sud', name: 'Sud', color: '#a6373e', logo: 'assets/loghi/sud.svg' },
+    { id: 'centro-storico', name: 'Centro Storico', color: '#557a48', logo: 'assets/loghi/centro-storico.svg' },
+    { id: 'palazzoni', name: 'Palazzoni', color: '#d19434', logo: 'assets/loghi/palazzoni.svg' }
   ],
   matches: []
 };
@@ -20,8 +20,8 @@ function standings(){
 }
 function render(){
   const table = standings();
-  byId('standingsBody').innerHTML = table.map((t,i)=>`<tr><td class="rank">${i+1}</td><td class="team"><span class="team-swatch" style="--team:${t.color}"></span>${t.name}</td><td>${t.g}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gf-t.ga > 0 ? '+' : ''}${t.gf-t.ga}</td><td class="points">${t.p}</td></tr>`).join('');
-  byId('matchesList').innerHTML = data.matches.length ? data.matches.map(m => { const h=team(m.home), a=team(m.away), done=m.homeScore!==null; return `<article class="match"><div class="match-meta"><b>${m.day}</b><span>${m.date}</span></div><div class="match-teams"><span>${h.name}</span><span style="color:${h.color}">●</span><span style="color:${a.color}">●</span><span>${a.name}</span></div><div class="match-score">${done ? `${m.homeScore} – ${m.awayScore}` : '<span class="pending">da giocare</span>'}</div></article>` }).join('') : '<article class="match"><div class="match-meta"><b>Calendario</b><span>13 settembre 2026</span></div><div class="match-teams">Il calendario sarà pubblicato dopo il sorteggio.</div><div class="match-score"><span class="pending">in attesa</span></div></article>';
+  byId('standingsBody').innerHTML = table.map((t,i)=>`<tr><td class="rank">${i+1}</td><td class="team"><img src="${t.logo}" alt="" style="width:34px;height:34px;object-fit:contain;vertical-align:middle;margin-right:10px">${t.name}</td><td>${t.g}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gf-t.ga > 0 ? '+' : ''}${t.gf-t.ga}</td><td class="points">${t.p}</td></tr>`).join('');
+  byId('matchesList').innerHTML = data.matches.length ? data.matches.map(m => { const h=team(m.home), a=team(m.away), done=m.homeScore!==null; return `<article class="match"><div class="match-meta"><b>${m.day}</b><span>${m.date}</span></div><div class="match-teams"><span>${h.name}</span><img src="${h.logo}" alt="" style="width:30px;height:30px;object-fit:contain"><span>vs</span><img src="${a.logo}" alt="" style="width:30px;height:30px;object-fit:contain"><span>${a.name}</span></div><div class="match-score">${done ? `${m.homeScore} – ${m.awayScore}` : '<span class="pending">da giocare</span>'}</div></article>` }).join('') : '<article class="match"><div class="match-meta"><b>Calendario</b><span>13 settembre 2026</span></div><div class="match-teams">Il calendario sarà pubblicato dopo il sorteggio.</div><div class="match-score"><span class="pending">in attesa</span></div></article>';
   const complete = data.matches.filter(m=>m.homeScore!==null); byId('matchCount').textContent=complete.length; byId('goalCount').textContent=complete.reduce((s,m)=>s+m.homeScore+m.awayScore,0); byId('leaderName').textContent=complete.length ? table[0].name : '—';
   byId('matchSelect').innerHTML = data.matches.map(m=>`<option value="${m.id}">${m.day} · ${team(m.home).name} – ${team(m.away).name}</option>`).join('') || '<option value="">Nessuna partita in calendario</option>';
   const teamOptions = data.teams.map(t => `<option value="${t.id}">${t.name}</option>`).join(''); byId('homeTeam').innerHTML=teamOptions; byId('awayTeam').innerHTML=teamOptions;
