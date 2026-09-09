@@ -1,3 +1,8 @@
+:root {
+  --wine: #347a38;
+  --red: #347a38;
+}
+
 .hero {
   background:
     linear-gradient(90deg, var(--wine) 0%, var(--wine) 43%, rgba(91, 30, 35, .88) 60%, rgba(91, 30, 35, .05) 100%),
