@@ -9,7 +9,8 @@ const defaultData = {
 };
 const isConfigured = window.SUPABASE_URL && window.SUPABASE_PUBLISHABLE_KEY && !window.SUPABASE_URL.includes('INSERISCI');
 const supabase = isConfigured && window.supabase ? window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_PUBLISHABLE_KEY) : null;
-let data = structuredClone(defaultData);
+// JSON clone mantiene la compatibilità anche con browser meno recenti.
+let data = JSON.parse(JSON.stringify(defaultData));
 let loggedIn = false;
 const byId = id => document.getElementById(id);
 const team = id => data.teams.find(t => t.id === id);
