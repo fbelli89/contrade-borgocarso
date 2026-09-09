@@ -96,6 +96,6 @@
   .hero-contrade-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-team { font-size: 13px; min-height: 155px; }
   .hero-team img { height: 110px; width: 110px; }
-  .official-poster { flex-direction: column; padding: 55px 28px; }
-  .poster-image { max-width: 330px; }
+  .official-poster { flex-direction: column; padding: 45px 28px; }
+  .poster-image { box-shadow: 8px 8px 0 #b9cf9c; max-width: 205px; }
 }
