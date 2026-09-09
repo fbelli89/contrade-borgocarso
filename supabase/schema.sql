@@ -35,6 +35,8 @@ create policy "Solo amministratori aggiornano" on public.matches for update
   with check (public.is_tournament_admin());
 create policy "Solo amministratori inseriscono" on public.matches for insert
   to authenticated with check (public.is_tournament_admin());
+create policy "Solo amministratori eliminano" on public.matches for delete
+  to authenticated using (public.is_tournament_admin());
 
 alter publication supabase_realtime add table public.matches;
 
