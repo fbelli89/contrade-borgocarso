@@ -69,6 +69,23 @@
 
 .dot.loss { background: #c43b3b; }
 
+.official-poster {
+  align-items: center;
+  background: #edf2e4;
+  display: flex;
+  gap: clamp(40px, 9vw, 140px);
+  justify-content: center;
+  padding: 80px max(8vw, 28px);
+}
+
+.official-poster-copy { max-width: 390px; }
+.official-poster-copy h2 { color: #28612e; font-size: clamp(39px, 4.5vw, 60px); line-height: 1.04; margin: 0 0 18px; }
+.official-poster-copy > p:not(.eyebrow):not(.poster-date) { color: #536153; font-size: 16px; line-height: 1.6; }
+.poster-date { color: #28612e; font-family: "Playfair Display", serif; font-size: 22px; font-weight: 700; line-height: 1.35; }
+.poster-date span { color: #587357; font-family: "DM Sans", sans-serif; font-size: 14px; font-weight: 600; }
+.poster-image { box-shadow: 15px 15px 0 #b9cf9c; display: block; line-height: 0; max-width: 400px; }
+.poster-image img { height: auto; max-width: 100%; }
+
 @media (max-width: 650px) {
   .hero {
     background: #3b803c;
@@ -79,4 +96,6 @@
   .hero-contrade-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-team { font-size: 13px; min-height: 155px; }
   .hero-team img { height: 110px; width: 110px; }
+  .official-poster { flex-direction: column; padding: 55px 28px; }
+  .poster-image { max-width: 330px; }
 }
