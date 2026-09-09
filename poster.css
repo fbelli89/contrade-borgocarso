@@ -54,6 +54,7 @@
 
 .hero-team img { height: 205px; object-fit: contain; width: 205px; }
 .hero-team-nord img, .hero-team-palazzoni img { transform: scale(1.55); }
+.hero-team-palazzoni img { transform: scale(2); }
 .hero-team span { margin-top: 5px; position: relative; z-index: 1; }
 
 .hero { align-items: flex-start; flex-wrap: wrap; }
