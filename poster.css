@@ -9,6 +9,47 @@
 
 .hero-mark { display: none; }
 
+.hero-contrade {
+  width: 330px;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-contrade > p {
+  color: #eff5df;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  margin: 0 0 12px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hero-contrade-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.hero-team {
+  align-items: center;
+  background: rgba(255, 255, 255, .13);
+  border: 1px solid rgba(255, 255, 255, .28);
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 700;
+  min-height: 126px;
+  overflow: hidden;
+  padding: 8px;
+  text-align: center;
+}
+
+.hero-team img { height: 86px; object-fit: contain; width: 86px; }
+.hero-team-nord img, .hero-team-palazzoni img { transform: scale(1.55); }
+.hero-team span { margin-top: 5px; position: relative; z-index: 1; }
+
 .team-logo-nord,
 .team-logo-palazzoni {
   transform: scale(1.65);
@@ -20,4 +61,7 @@
   .hero {
     background: #3b803c;
   }
+
+  .hero { align-items: flex-start; flex-direction: column; gap: 28px; }
+  .hero-contrade { max-width: 330px; width: 100%; }
 }
