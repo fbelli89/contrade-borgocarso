@@ -16,12 +16,25 @@ create table if not exists public.admin_users (
 alter table public.matches enable row level security;
 alter table public.admin_users enable row level security;
 
+create or replace function public.is_tournament_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (select 1 from public.admin_users where id = auth.uid());
+$$;
+
+revoke all on function public.is_tournament_admin() from public;
+grant execute on function public.is_tournament_admin() to authenticated;
+
 create policy "Risultati pubblici" on public.matches for select using (true);
 create policy "Solo amministratori aggiornano" on public.matches for update
-  to authenticated using (exists (select 1 from public.admin_users where id = auth.uid()))
-  with check (exists (select 1 from public.admin_users where id = auth.uid()));
+  to authenticated using (public.is_tournament_admin())
+  with check (public.is_tournament_admin());
 create policy "Solo amministratori inseriscono" on public.matches for insert
-  to authenticated with check (exists (select 1 from public.admin_users where id = auth.uid()));
+  to authenticated with check (public.is_tournament_admin());
 
 alter publication supabase_realtime add table public.matches;
 
