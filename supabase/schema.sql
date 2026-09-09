@@ -48,6 +48,8 @@ create policy "Solo amministratori eliminano" on public.matches for delete
 create policy "Marcatori pubblici" on public.goals for select using (true);
 create policy "Solo amministratori inseriscono marcatori" on public.goals for insert
   to authenticated with check (public.is_tournament_admin());
+create policy "Solo amministratori eliminano marcatori" on public.goals for delete
+  to authenticated using (public.is_tournament_admin());
 
 alter publication supabase_realtime add table public.matches;
 alter publication supabase_realtime add table public.goals;
