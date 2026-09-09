@@ -9,6 +9,11 @@
 
 .hero-mark { display: none; }
 
+.team-logo-nord,
+.team-logo-palazzoni {
+  transform: scale(1.65);
+}
+
 @media (max-width: 650px) {
   .hero {
     background: #3b803c;
