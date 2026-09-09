@@ -69,6 +69,13 @@
 
 .dot.loss { background: #c43b3b; }
 
+.footer-privacy { color: #e6e2cb; font-size: 13px; text-decoration: underline; }
+.legal-page { margin: 0 auto; max-width: 860px; padding: 78px 28px; }
+.legal-page h1 { color: #28612e; font: 700 clamp(42px, 5vw, 62px)/1.05 "Playfair Display", serif; margin: 0 0 8px; }
+.legal-page h2 { color: #28612e; font-size: 27px; margin: 42px 0 10px; }
+.legal-page p { color: #494941; line-height: 1.75; max-width: 760px; }
+.legal-page a { color: #28612e; font-weight: 700; }.legal-updated { color: var(--muted) !important; font-size: 13px; }
+
 .official-poster {
   align-items: center;
   background: #edf2e4;
