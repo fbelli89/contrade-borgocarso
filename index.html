@@ -65,6 +65,11 @@
         </div>
       </section>
 
+      <section id="marcatori" class="section scorers-section">
+        <div class="section-heading"><div><p class="eyebrow">I protagonisti</p><h2>Classifica marcatori</h2></div></div>
+        <div id="scorersList" class="scorers-list"></div>
+      </section>
+
       <section id="partite" class="section matches-section">
         <div class="section-heading"><div><p class="eyebrow">Calendario</p><h2>Partite</h2></div><button class="filter active" id="allMatches">13 settembre 2026</button></div>
         <div id="matchesList" class="matches-list"></div>
@@ -89,6 +94,15 @@
         <button class="button full" type="submit">Salva risultato</button>
         <button id="deleteMatch" class="danger" type="button">Elimina la partita selezionata</button>
       </form>
+      <div class="admin-options">
+        <h3>Registra un marcatore</h3>
+        <form id="scorerForm" class="calendar-form">
+          <label>Partita<select id="scorerMatch" required></select></label>
+          <label>Contrada<select id="scorerTeam" required></select></label>
+          <label>Nome del marcatore<input id="scorerName" type="text" maxlength="60" required /></label>
+          <button class="text-button" type="submit">Aggiungi marcatore</button>
+        </form>
+      </div>
       <div class="admin-options">
         <h3>Calendario dopo il sorteggio</h3>
         <p class="admin-help">Aggiungi le partite nell’ordine estratto. Tutte si disputeranno il 13 settembre 2026.</p>
