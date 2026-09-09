@@ -8,7 +8,7 @@ const defaultData = {
   matches: []
 };
 const isConfigured = window.SUPABASE_URL && window.SUPABASE_PUBLISHABLE_KEY && !window.SUPABASE_URL.includes('INSERISCI');
-const supabase = isConfigured ? window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_PUBLISHABLE_KEY) : null;
+const supabase = isConfigured && window.supabase ? window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_PUBLISHABLE_KEY) : null;
 let data = structuredClone(defaultData);
 let loggedIn = false;
 const byId = id => document.getElementById(id);
@@ -27,6 +27,8 @@ function render(){
   const teamOptions = data.teams.map(t => `<option value="${t.id}">${t.name}</option>`).join(''); byId('homeTeam').innerHTML=teamOptions; byId('awayTeam').innerHTML=teamOptions;
 }
 function toast(message){const el=byId('toast');el.textContent=message;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+function openDialog(id){const dialog=byId(id);if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','')}
+function closeDialog(id){const dialog=byId(id);if(typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open')}
 async function loadRemoteData(){
   if (!supabase) { render(); toast('Modalità anteprima: collega Supabase per pubblicare i dati.'); return; }
   const { data: remoteMatches, error } = await supabase.from('matches').select('*').order('id');
@@ -34,12 +36,12 @@ async function loadRemoteData(){
   data.matches = remoteMatches.map(m => ({ id:m.id, day:m.day, date:m.date, home:m.home, away:m.away, homeScore:m.home_score, awayScore:m.away_score }));
   render();
 }
-byId('adminTrigger').onclick=()=> { if (!isConfigured) return toast('Configura Supabase prima di accedere.'); loggedIn ? byId('adminDialog').showModal() : byId('loginDialog').showModal(); };
-document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>byId(b.dataset.close).close());
-byId('loginForm').onsubmit=async e=>{e.preventDefault();const { error }=await supabase.auth.signInWithPassword({email:byId('email').value,password:byId('password').value});if(error){byId('loginError').textContent='Credenziali non corrette o utente non autorizzato.';return}loggedIn=true;byId('loginDialog').close();e.target.reset();byId('adminDialog').showModal()};
-byId('resultForm').onsubmit=async e=>{e.preventDefault();const m=data.matches.find(x=>x.id===Number(byId('matchSelect').value));const update={home_score:Number(byId('homeScore').value),away_score:Number(byId('awayScore').value)};const {error}=await supabase.from('matches').update(update).eq('id',m.id);if(error){toast('Non autorizzato a modificare i risultati.');return}m.homeScore=update.home_score;m.awayScore=update.away_score;render();toast('Risultato salvato: classifica aggiornata.');byId('adminDialog').close();e.target.reset()};
+byId('adminTrigger').onclick=()=> { if (!isConfigured) return toast('Configura Supabase prima di accedere.'); if (!supabase) return toast('La connessione a Supabase è stata bloccata dal browser.'); loggedIn ? openDialog('adminDialog') : openDialog('loginDialog'); };
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeDialog(b.dataset.close));
+byId('loginForm').onsubmit=async e=>{e.preventDefault();const { error }=await supabase.auth.signInWithPassword({email:byId('email').value,password:byId('password').value});if(error){byId('loginError').textContent='Credenziali non corrette o utente non autorizzato.';return}loggedIn=true;closeDialog('loginDialog');e.target.reset();openDialog('adminDialog')};
+byId('resultForm').onsubmit=async e=>{e.preventDefault();const m=data.matches.find(x=>x.id===Number(byId('matchSelect').value));const update={home_score:Number(byId('homeScore').value),away_score:Number(byId('awayScore').value)};const {error}=await supabase.from('matches').update(update).eq('id',m.id);if(error){toast('Non autorizzato a modificare i risultati.');return}m.homeScore=update.home_score;m.awayScore=update.away_score;render();toast('Risultato salvato: classifica aggiornata.');closeDialog('adminDialog');e.target.reset()};
 byId('calendarForm').onsubmit=async e=>{e.preventDefault();const home=byId('homeTeam').value,away=byId('awayTeam').value;if(home===away)return toast('Scegli due contrade diverse.');if(data.matches.some(m=>(m.home===home&&m.away===away)||(m.home===away&&m.away===home)))return toast('Questa partita è già in calendario.');const match={day:`Partita ${data.matches.length+1}`,date:'Domenica 13 settembre 2026',home,away,home_score:null,away_score:null};const {data: inserted,error}=await supabase.from('matches').insert(match).select().single();if(error)return toast('Impossibile aggiungere la partita.');data.matches.push({id:inserted.id,day:inserted.day,date:inserted.date,home:inserted.home,away:inserted.away,homeScore:null,awayScore:null});render();toast('Partita aggiunta al calendario.');};
-byId('logout').onclick=async()=>{await supabase.auth.signOut();loggedIn=false;byId('adminDialog').close();toast('Accesso amministratore terminato.')};
+byId('logout').onclick=async()=>{await supabase.auth.signOut();loggedIn=false;closeDialog('adminDialog');toast('Accesso amministratore terminato.')};
 async function init(){
   if (supabase) { const {data:{session}}=await supabase.auth.getSession(); loggedIn=Boolean(session); supabase.channel('partite-aggiornate').on('postgres_changes',{event:'*',schema:'public',table:'matches'},loadRemoteData).subscribe(); }
   loadRemoteData();
