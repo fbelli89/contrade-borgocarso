@@ -60,6 +60,8 @@
   transform: scale(1.65);
 }
 
+.team-logo-nord { margin-right: 29px !important; }
+
 .dot.loss { background: #c43b3b; }
 
 @media (max-width: 650px) {
