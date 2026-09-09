@@ -9,6 +9,11 @@
 
 .hero-mark { display: none; }
 
+.hero-edition {
+  font-size: 15px;
+  letter-spacing: 2.6px;
+}
+
 .hero-contrade {
   width: 330px;
   color: white;
