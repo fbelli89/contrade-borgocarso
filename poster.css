@@ -1,5 +1,15 @@
 .hero {
   background:
-    linear-gradient(90deg, rgba(43, 21, 24, .95) 0%, rgba(91, 30, 35, .82) 47%, rgba(30, 21, 14, .28) 100%),
-    url("assets/immagini/locandina-torneo-contrade.jpg") center 34% / cover;
+    linear-gradient(90deg, var(--wine) 0%, var(--wine) 43%, rgba(91, 30, 35, .88) 60%, rgba(91, 30, 35, .05) 100%),
+    var(--wine) url("assets/immagini/locandina-torneo-contrade.jpg") right center / auto 100% no-repeat;
+}
+
+.hero-mark { display: none; }
+
+@media (max-width: 650px) {
+  .hero {
+    background:
+      linear-gradient(90deg, rgba(91, 30, 35, .96), rgba(91, 30, 35, .82)),
+      var(--wine) url("assets/immagini/locandina-torneo-contrade.jpg") right center / auto 100% no-repeat;
+  }
 }
