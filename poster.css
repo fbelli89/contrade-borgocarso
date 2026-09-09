@@ -15,7 +15,7 @@
 }
 
 .hero-contrade {
-  width: 330px;
+  width: 500px;
   color: white;
   position: relative;
   z-index: 1;
@@ -33,8 +33,8 @@
 
 .hero-contrade-grid {
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .hero-team {
@@ -45,13 +45,13 @@
   flex-direction: column;
   font-size: 12px;
   font-weight: 700;
-  min-height: 126px;
+  min-height: 150px;
   overflow: hidden;
   padding: 8px;
   text-align: center;
 }
 
-.hero-team img { height: 86px; object-fit: contain; width: 86px; }
+.hero-team img { height: 110px; object-fit: contain; width: 110px; }
 .hero-team-nord img, .hero-team-palazzoni img { transform: scale(1.55); }
 .hero-team span { margin-top: 5px; position: relative; z-index: 1; }
 
@@ -68,5 +68,6 @@
   }
 
   .hero { align-items: flex-start; flex-direction: column; gap: 28px; }
-  .hero-contrade { max-width: 330px; width: 100%; }
+  .hero-contrade { max-width: 360px; width: 100%; }
+  .hero-contrade-grid { grid-template-columns: repeat(2, 1fr); }
 }
