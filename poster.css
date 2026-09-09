@@ -4,17 +4,13 @@
 }
 
 .hero {
-  background:
-    linear-gradient(90deg, rgba(52, 122, 56, .98) 0%, rgba(52, 122, 56, .94) 43%, rgba(52, 122, 56, .72) 60%, rgba(52, 122, 56, .18) 100%),
-    var(--wine) url("assets/immagini/locandina-torneo-contrade.jpg") right center / auto 100% no-repeat;
+  background: #3b803c;
 }
 
 .hero-mark { display: none; }
 
 @media (max-width: 650px) {
   .hero {
-    background:
-      linear-gradient(90deg, rgba(52, 122, 56, .97), rgba(52, 122, 56, .82)),
-      var(--wine) url("assets/immagini/locandina-torneo-contrade.jpg") right center / auto 100% no-repeat;
+    background: #3b803c;
   }
 }
