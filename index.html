@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#5b1e23" />
+    <title>Torneo delle Contrade · Borgo Carso</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="Torneo delle Contrade, home">
+        <span class="crest">BC</span><span><strong>TORNEO</strong><em>delle Contrade</em></span>
+      </a>
+      <nav><a href="#classifica">Classifica</a><a href="#partite">Partite</a><button id="adminTrigger" class="admin-link">Area amministratore</button></nav>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Borgo Carso · Edizione 2026</p>
+          <h1>Il cuore del borgo<br /><i>scende in campo.</i></h1>
+          <p class="intro">Calendario, risultati e classifica sempre aggiornati del Torneo delle Contrade di Borgo Carso.</p>
+          <a href="#classifica" class="button">Scopri la classifica <span>↓</span></a>
+        </div>
+        <div class="hero-mark" aria-hidden="true"><span>TORNEO</span><b>BC</b><span>DELLE CONTRADE</span><i>✦</i></div>
+      </section>
+
+      <section class="summary" aria-label="Riepilogo torneo">
+        <div><span id="matchCount">0</span><small>partite disputate</small></div>
+        <div><span id="goalCount">0</span><small>reti segnate</small></div>
+        <div><span id="leaderName">—</span><small>in testa alla classifica</small></div>
+      </section>
+
+      <section id="classifica" class="section standings-section">
+        <div class="section-heading"><div><p class="eyebrow">Il tabellone</p><h2>Classifica generale</h2></div><p class="legend"><span class="dot win"></span> vittoria <span class="dot draw"></span> pareggio</p></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Pos.</th><th>Contrada</th><th>G</th><th>V</th><th>N</th><th>P</th><th>DR</th><th>Pt</th></tr></thead>
+            <tbody id="standingsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="partite" class="section matches-section">
+        <div class="section-heading"><div><p class="eyebrow">Calendario</p><h2>Partite</h2></div><button class="filter active" id="allMatches">13 settembre 2026</button></div>
+        <div id="matchesList" class="matches-list"></div>
+      </section>
+    </main>
+
+    <footer><span class="crest small">BC</span><p>Torneo delle Contrade · Borgo Carso</p><span>Tradizione, passione, comunità.</span></footer>
+
+    <dialog id="loginDialog" class="dialog login-dialog">
+      <button class="close" data-close="loginDialog" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Accesso riservato</p><h2>Area amministratore</h2><p>Inserisci il PIN per gestire i risultati del torneo.</p>
+      <form id="loginForm"><label for="email">E-mail amministratore</label><input id="email" type="email" autocomplete="email" required /><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required /><p id="loginError" class="error"></p><button class="button full" type="submit">Accedi</button></form>
+      <small class="hint">L’accesso è gestito in modo sicuro da Supabase.</small>
+    </dialog>
+
+    <dialog id="adminDialog" class="dialog admin-dialog">
+      <button class="close" data-close="adminDialog" aria-label="Chiudi">×</button>
+      <div class="admin-title"><div><p class="eyebrow">Pannello di gestione</p><h2>Inserisci un risultato</h2></div><button id="logout" class="text-button">Esci</button></div>
+      <form id="resultForm" class="result-form">
+        <label>Partita<select id="matchSelect" required></select></label>
+        <div class="score-inputs"><label>Reti casa<input id="homeScore" type="number" min="0" max="99" required /></label><span>—</span><label>Reti ospiti<input id="awayScore" type="number" min="0" max="99" required /></label></div>
+        <button class="button full" type="submit">Salva risultato</button>
+      </form>
+      <div class="admin-options">
+        <h3>Calendario dopo il sorteggio</h3>
+        <p class="admin-help">Aggiungi le partite nell’ordine estratto. Tutte si disputeranno il 13 settembre 2026.</p>
+        <form id="calendarForm" class="calendar-form">
+          <label>Contrada casa<select id="homeTeam" required></select></label>
+          <label>Contrada ospite<select id="awayTeam" required></select></label>
+          <button class="text-button" type="submit">Aggiungi partita</button>
+        </form>
+      </div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
