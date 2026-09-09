@@ -96,6 +96,9 @@
   .hero-contrade-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-team { font-size: 13px; min-height: 155px; }
   .hero-team img { height: 110px; width: 110px; }
-  .official-poster { flex-direction: column; padding: 45px 28px; }
-  .poster-image { box-shadow: 8px 8px 0 #b9cf9c; max-width: 205px; }
+  .official-poster { align-items: flex-start; flex-direction: row; gap: 16px; padding: 36px 22px; }
+  .official-poster-copy { flex: 1; min-width: 0; }
+  .official-poster-copy h2 { font-size: 34px; }
+  .official-poster-copy > p:not(.eyebrow):not(.poster-date) { display: none; }
+  .poster-image { box-shadow: 5px 5px 0 #b9cf9c; flex: 0 0 110px; max-width: 110px; }
 }
