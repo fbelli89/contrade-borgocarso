@@ -20,9 +20,15 @@ create table if not exists public.goals (
   player text not null
 );
 
+create table if not exists public.tournament_settings (
+  id boolean primary key default true check (id),
+  champion text check (champion in ('nord', 'sud', 'centro-storico', 'palazzoni'))
+);
+
 alter table public.matches enable row level security;
 alter table public.admin_users enable row level security;
 alter table public.goals enable row level security;
+alter table public.tournament_settings enable row level security;
 
 create or replace function public.is_tournament_admin()
 returns boolean
@@ -50,9 +56,16 @@ create policy "Solo amministratori inseriscono marcatori" on public.goals for in
   to authenticated with check (public.is_tournament_admin());
 create policy "Solo amministratori eliminano marcatori" on public.goals for delete
   to authenticated using (public.is_tournament_admin());
+create policy "Vincitore pubblico" on public.tournament_settings for select using (true);
+create policy "Solo amministratori impostano il vincitore" on public.tournament_settings for insert
+  to authenticated with check (public.is_tournament_admin());
+create policy "Solo amministratori aggiornano il vincitore" on public.tournament_settings for update
+  to authenticated using (public.is_tournament_admin())
+  with check (public.is_tournament_admin());
 
 alter publication supabase_realtime add table public.matches;
 alter publication supabase_realtime add table public.goals;
+alter publication supabase_realtime add table public.tournament_settings;
 
 -- DOPO aver creato l'utente amministratore in Authentication > Users, esegui:
 -- insert into public.admin_users (id)

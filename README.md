@@ -16,6 +16,8 @@ Sito statico pubblicabile gratuitamente con **GitHub Pages**. I risultati sono c
 
 Prima del sorteggio il calendario è volutamente vuoto. Dopo l’estrazione, apri **Area amministratore**, accedi con e-mail/password e aggiungi le partite nell’ordine estratto: il sito le pubblica subito, tutte datate **13 settembre 2026**. Poi registra i risultati; la classifica di ogni visitatore si aggiorna automaticamente.
 
+Al termine della finale, salva il risultato e nella sezione **Proclama la contrada vincitrice** seleziona una delle due finaliste: sul sito apparirà il banner del campione con la coppa. Se il database era già stato creato prima di questa funzione, esegui una volta [supabase/migration-tournament-winner.sql](supabase/migration-tournament-winner.sql) nel SQL Editor di Supabase.
+
 ## Personalizzazione
 
 Le quattro contrade e i colori iniziali sono definiti in `app.js`. Per modificare il calendario, aggiorna le righe nella tabella `matches` dal **Table Editor** di Supabase.

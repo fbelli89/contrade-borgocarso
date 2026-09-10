@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="finale.css" />
   </head>
   <body>
     <header class="topbar">
@@ -44,6 +45,8 @@
         <div><span id="goalCount">0</span><small>reti segnate</small></div>
         <div><span id="leaderName">—</span><small>in testa alla classifica</small></div>
       </section>
+
+      <section id="championBanner" class="champion-banner" hidden aria-live="polite"></section>
 
       <section class="official-poster">
         <div class="official-poster-copy">
@@ -109,6 +112,14 @@
         <form class="calendar-form">
           <label>Marcatore inserito<select id="goalSelect"></select></label>
           <button id="deleteGoal" class="danger" type="button">Elimina il marcatore selezionato</button>
+        </form>
+      </div>
+      <div class="admin-options winner-admin">
+        <h3>Proclama la contrada vincitrice</h3>
+        <p class="admin-help">Dopo la finale, seleziona la contrada campione: sarà evidenziata pubblicamente con la coppa.</p>
+        <form id="winnerForm" class="calendar-form">
+          <label>Contrada vincitrice<select id="winnerTeam" required></select></label>
+          <button class="button" type="submit">Assegna la coppa 🏆</button>
         </form>
       </div>
       <div class="admin-options">

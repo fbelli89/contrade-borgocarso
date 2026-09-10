@@ -1,0 +1,37 @@
+.final-match {
+  background: linear-gradient(135deg, #3f2813, #725019 48%, #3f2813);
+  border: 2px solid #e5bf6a;
+  box-shadow: 0 10px 22px rgba(81, 53, 17, .24);
+  color: #fff7df;
+  grid-template-columns: 54px 115px 1fr 95px;
+}
+
+.final-match .match-meta { color: #ffe8ae; }
+.final-match .match-meta b { color: #fff7df; font: 700 18px "Playfair Display"; letter-spacing: .7px; text-transform: uppercase; }
+.final-match .match-score { color: #fff0be; }
+.final-match .pending { background: rgba(255, 255, 255, .1); border-color: #f0cb78; color: #fff0be; }
+.final-trophy { filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .25)); font-size: 35px; text-align: center; }
+
+.champion-banner {
+  background: radial-gradient(circle at top, #f9df91, #b47a24 58%, #5b3510);
+  border-bottom: 5px solid #f7db82;
+  box-shadow: 0 12px 25px rgba(94, 56, 12, .2);
+  color: #fff8e4;
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 34px 28px;
+  text-align: center;
+}
+
+.champion-banner p { font-size: 12px; font-weight: 800; letter-spacing: 2px; margin: 0 0 12px; text-transform: uppercase; }
+.champion-banner img { display: block; height: 90px; margin: 0 auto 8px; object-fit: contain; width: 90px; }
+.champion-banner strong { display: block; font: 800 clamp(34px, 5vw, 54px)/1 "Playfair Display"; text-shadow: 0 2px 2px rgba(64, 35, 6, .35); }
+.champion-banner span { display: block; font-weight: 700; letter-spacing: 1.4px; margin-top: 9px; text-transform: uppercase; }
+.winner-admin .button { margin-bottom: 14px; white-space: nowrap; }
+
+@media (max-width: 650px) {
+  .final-match { grid-template-columns: 1fr; }
+  .final-trophy { margin-bottom: -5px; }
+  .champion-banner { margin: 0; }
+  .winner-admin .button { width: 100%; }
+}

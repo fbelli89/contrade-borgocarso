@@ -6,7 +6,8 @@ const defaultData = {
     { id: 'palazzoni', name: 'Palazzoni', color: '#d19434', logo: 'assets/loghi/palazzoni.png' }
   ],
   matches: [],
-  goals: []
+  goals: [],
+  winner: null
 };
 const matchSchedule = ['10:00', '10:55', '11:50', '15:00', '15:55', '16:50', '18:00'];
 const matchDetails = index => ({
@@ -28,7 +29,7 @@ function standings(){
 function render(selectedMatchId = byId('matchSelect').value){
   const table = standings();
   byId('standingsBody').innerHTML = table.map((t,i)=>`<tr><td class="rank">${i+1}</td><td class="team"><img class="team-logo team-logo-${t.id}" src="${t.logo}" alt="" style="width:54px;height:54px;object-fit:contain;vertical-align:middle;margin-right:12px">${t.name}</td><td>${t.g}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gf-t.ga > 0 ? '+' : ''}${t.gf-t.ga}</td><td class="points">${t.p}</td></tr>`).join('');
-  byId('matchesList').innerHTML = data.matches.length ? data.matches.map((m,index) => { const h=team(m.home), a=team(m.away), done=m.homeScore!==null, details=matchDetails(index); return `<article class="match"><div class="match-meta"><b>${details.day}</b><span>${details.date}</span></div><div class="match-teams"><span>${h.name}</span><img src="${h.logo}" alt="" style="width:30px;height:30px;object-fit:contain"><span>vs</span><img src="${a.logo}" alt="" style="width:30px;height:30px;object-fit:contain"><span>${a.name}</span></div><div class="match-score">${done ? `${m.homeScore} – ${m.awayScore}` : '<span class="pending">da giocare</span>'}</div></article>` }).join('') : '<article class="match"><div class="match-meta"><b>Calendario</b><span>13 settembre 2026</span></div><div class="match-teams">Il calendario sarà pubblicato dopo il sorteggio.</div><div class="match-score"><span class="pending">in attesa</span></div></article>';
+  byId('matchesList').innerHTML = data.matches.length ? data.matches.map((m,index) => { const h=team(m.home), a=team(m.away), done=m.homeScore!==null, details=matchDetails(index), isFinal=index===6; return `<article class="match${isFinal ? ' final-match' : ''}">${isFinal ? '<div class="final-trophy" aria-hidden="true">🏆</div>' : ''}<div class="match-meta"><b>${details.day}</b><span>${details.date}</span></div><div class="match-teams"><span>${h.name}</span><img src="${h.logo}" alt="" style="width:30px;height:30px;object-fit:contain"><span>vs</span><img src="${a.logo}" alt="" style="width:30px;height:30px;object-fit:contain"><span>${a.name}</span></div><div class="match-score">${done ? `${m.homeScore} – ${m.awayScore}` : '<span class="pending">da giocare</span>'}</div></article>` }).join('') : '<article class="match"><div class="match-meta"><b>Calendario</b><span>13 settembre 2026</span></div><div class="match-teams">Il calendario sarà pubblicato dopo il sorteggio.</div><div class="match-score"><span class="pending">in attesa</span></div></article>';
   const complete = data.matches.filter(m=>m.homeScore!==null); byId('matchCount').textContent=complete.length; byId('goalCount').textContent=complete.reduce((s,m)=>s+m.homeScore+m.awayScore,0); byId('leaderName').textContent=complete.length ? table[0].name : '—';
   const scorers=Object.values(data.goals.reduce((all,goal)=>{const id=`${goal.player}-${goal.team}`;all[id]??={...goal,total:0};all[id].total++;return all},{})).sort((a,b)=>b.total-a.total||a.player.localeCompare(b.player));
   byId('scorersList').innerHTML=scorers.length?scorers.map((scorer,index)=>`<article class="scorer"><span class="scorer-rank">${index+1}</span><img src="${team(scorer.team).logo}" alt="" /><strong>${scorer.player}</strong><span>${team(scorer.team).name}</span><b>${scorer.total}<small> gol</small></b></article>`).join(''):'<p class="empty-state">La classifica marcatori sarà aggiornata al termine delle partite.</p>';
@@ -37,6 +38,12 @@ function render(selectedMatchId = byId('matchSelect').value){
   byId('scorerMatch').innerHTML=data.matches.map((m,index)=>`<option value="${m.id}">${matchDetails(index).day} · ${team(m.home).name} – ${team(m.away).name}</option>`).join('') || '<option value="">Nessuna partita in calendario</option>';
   byId('goalSelect').innerHTML=data.goals.map(goal=>{const index=data.matches.findIndex(item=>item.id===goal.match_id);return `<option value="${goal.id}">${goal.player} · ${team(goal.team).name}${index >= 0 ? ` · ${matchDetails(index).day}`:''}</option>`}).join('') || '<option value="">Nessun marcatore registrato</option>';
   const teamOptions = data.teams.map(t => `<option value="${t.id}">${t.name}</option>`).join(''); byId('homeTeam').innerHTML=teamOptions; byId('awayTeam').innerHTML=teamOptions;
+  const finalMatch=data.matches[6], winnerOptions=(finalMatch ? [team(finalMatch.home),team(finalMatch.away)] : data.teams).map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+  byId('winnerTeam').innerHTML=winnerOptions;
+  if (data.winner) byId('winnerTeam').value=data.winner;
+  const championBanner=byId('championBanner'), winner=team(data.winner);
+  championBanner.hidden=!winner;
+  championBanner.innerHTML=winner ? `<p>🏆 Campione del Torneo delle Contrade 2026 🏆</p><img src="${winner.logo}" alt="Logo Contrada ${winner.name}" /><strong>${winner.name}</strong><span>La contrada vincitrice</span>` : '';
   syncScoreFields();
   syncScorerTeams();
 }
@@ -48,10 +55,11 @@ function openDialog(id){const dialog=byId(id);if(typeof dialog.showModal==='func
 function closeDialog(id){const dialog=byId(id);if(typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open')}
 async function loadRemoteData(){
   if (!supabaseClient) { render(); toast('Modalità anteprima: collega Supabase per pubblicare i dati.'); return; }
-  const [{ data: remoteMatches, error: matchesError },{ data: remoteGoals, error: goalsError }]=await Promise.all([supabaseClient.from('matches').select('*').order('id'),supabaseClient.from('goals').select('*').order('id')]);
+  const [{ data: remoteMatches, error: matchesError },{ data: remoteGoals, error: goalsError },{ data: settings, error: settingsError }]=await Promise.all([supabaseClient.from('matches').select('*').order('id'),supabaseClient.from('goals').select('*').order('id'),supabaseClient.from('tournament_settings').select('champion').eq('id',true).maybeSingle()]);
   if (matchesError) { console.error(matchesError); render(); toast('Impossibile caricare il torneo. Verifica la configurazione.'); return; }
   data.matches = remoteMatches.map(m => ({ id:m.id, day:m.day, date:m.date, home:m.home, away:m.away, homeScore:m.home_score, awayScore:m.away_score }));
   data.goals=goalsError?[]:remoteGoals;
+  data.winner=settingsError ? null : settings?.champion ?? null;
   render();
 }
 byId('adminTrigger').onclick=()=> { if (!isConfigured) return toast('Configura Supabase prima di accedere.'); if (!supabaseClient) return toast('La connessione a Supabase è stata bloccata dal browser.'); loggedIn ? openDialog('adminDialog') : openDialog('loginDialog'); };
@@ -62,11 +70,12 @@ byId('matchSelect').onchange=syncScoreFields;
 byId('scorerMatch').onchange=syncScorerTeams;
 byId('scorerForm').onsubmit=async e=>{e.preventDefault();const matchId=Number(byId('scorerMatch').value),teamId=byId('scorerTeam').value,player=byId('scorerName').value.trim();if(!matchId||!teamId||!player)return;const {data:goal,error}=await supabaseClient.from('goals').insert({match_id:matchId,team:teamId,player}).select().single();if(error)return toast('Impossibile aggiungere il marcatore.');data.goals.push(goal);render(matchId);e.target.reset();toast('Marcatore aggiunto alla classifica.');};
 byId('deleteGoal').onclick=async()=>{const id=Number(byId('goalSelect').value),goal=data.goals.find(item=>item.id===id);if(!goal)return toast('Seleziona un marcatore da eliminare.');if(!confirm(`Eliminare il gol di ${goal.player}?`))return;const {error}=await supabaseClient.from('goals').delete().eq('id',id);if(error)return toast('Non autorizzato a eliminare il marcatore.');data.goals=data.goals.filter(item=>item.id!==id);render();toast('Marcatore eliminato.');};
+byId('winnerForm').onsubmit=async e=>{e.preventDefault();const finalMatch=data.matches[6],winner=byId('winnerTeam').value;if(!finalMatch)return toast('Inserisci prima la finale delle ore 18:00.');if(finalMatch.homeScore===null)return toast('Salva prima il risultato della finale.');if(winner!==finalMatch.home&&winner!==finalMatch.away)return toast('Scegli una delle due contrade finaliste.');const {error}=await supabaseClient.from('tournament_settings').upsert({id:true,champion:winner});if(error)return toast('Impossibile assegnare la coppa. Esegui prima la migrazione del database.');data.winner=winner;render();toast(`Coppa assegnata alla Contrada ${team(winner).name}.`);};
 byId('deleteMatch').onclick=async()=>{const match=selectedMatch();if(!match)return toast('Seleziona una partita da eliminare.');if(!confirm(`Eliminare definitivamente ${team(match.home).name} – ${team(match.away).name}?`))return;const {error}=await supabaseClient.from('matches').delete().eq('id',match.id);if(error)return toast('Non autorizzato a eliminare la partita.');data.matches=data.matches.filter(item=>item.id!==match.id);render();toast('Partita eliminata dal calendario.');};
 byId('calendarForm').onsubmit=async e=>{e.preventDefault();const home=byId('homeTeam').value,away=byId('awayTeam').value,matchIndex=data.matches.length,details=matchDetails(matchIndex);if(matchIndex >= matchSchedule.length)return toast('Il calendario prevede sei partite e una finale.');if(home===away)return toast('Scegli due contrade diverse.');if(matchIndex < 6 && data.matches.some(m=>(m.home===home&&m.away===away)||(m.home===away&&m.away===home)))return toast('Questa partita è già in calendario.');const match={day:details.day,date:details.date,home,away,home_score:null,away_score:null};const {data: inserted,error}=await supabaseClient.from('matches').insert(match).select().single();if(error)return toast('Impossibile aggiungere la partita.');data.matches.push({id:inserted.id,day:inserted.day,date:inserted.date,home:inserted.home,away:inserted.away,homeScore:null,awayScore:null});render(inserted.id);toast(`${details.day} aggiunta al calendario.`);};
 byId('logout').onclick=async()=>{await supabaseClient.auth.signOut();loggedIn=false;closeDialog('adminDialog');toast('Accesso amministratore terminato.')};
 async function init(){
-  if (supabaseClient) { const {data:{session}}=await supabaseClient.auth.getSession(); loggedIn=Boolean(session); supabaseClient.channel('partite-aggiornate').on('postgres_changes',{event:'*',schema:'public',table:'matches'},loadRemoteData).on('postgres_changes',{event:'*',schema:'public',table:'goals'},loadRemoteData).subscribe(); }
+  if (supabaseClient) { const {data:{session}}=await supabaseClient.auth.getSession(); loggedIn=Boolean(session); supabaseClient.channel('partite-aggiornate').on('postgres_changes',{event:'*',schema:'public',table:'matches'},loadRemoteData).on('postgres_changes',{event:'*',schema:'public',table:'goals'},loadRemoteData).on('postgres_changes',{event:'*',schema:'public',table:'tournament_settings'},loadRemoteData).subscribe(); }
   loadRemoteData();
 }
 init();
