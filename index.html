@@ -12,13 +12,14 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="poster.css" />
     <link rel="stylesheet" href="finale.css" />
+    <link rel="stylesheet" href="storia.css" />
   </head>
   <body>
     <header class="topbar">
       <a class="brand" href="#home" aria-label="Torneo delle Contrade, home">
         <span class="crest">BC</span><span><strong>TORNEO</strong><em>delle Contrade</em></span>
       </a>
-      <nav><a href="#classifica">Classifica</a><a href="#partite">Partite</a><button id="adminTrigger" class="admin-link">Area amministratore</button></nav>
+      <nav><a href="#storia">Storia</a><a href="#classifica">Classifica</a><a href="#partite">Partite</a><button id="adminTrigger" class="admin-link">Area amministratore</button></nav>
     </header>
 
     <main id="home">
@@ -47,6 +48,14 @@
       </section>
 
       <section id="championBanner" class="champion-banner" hidden aria-live="polite"></section>
+
+      <section id="storia" class="section edition-history" aria-labelledby="editionHistoryTitle">
+        <div class="section-heading"><div><p class="eyebrow">Le edizioni</p><h2 id="editionHistoryTitle">La storia comincia qui</h2></div></div>
+        <article class="edition-card">
+          <div class="edition-year" aria-hidden="true">2026</div>
+          <div class="edition-copy"><p class="eyebrow">Edizione inaugurale</p><h3>Il primo Torneo delle Contrade di Borgo Carso</h3><p>Quattro contrade, una giornata di sport e comunità: l’edizione 2026 inaugura una tradizione destinata a crescere anno dopo anno.</p><a class="edition-link" href="#partite">Rivivi l’edizione <span aria-hidden="true">↓</span></a></div>
+        </article>
+      </section>
 
       <section class="official-poster">
         <div class="official-poster-copy">

@@ -1,0 +1,15 @@
+.edition-history { padding-bottom: 24px; }
+.edition-card { background: var(--paper); border: 1px solid var(--line); display: grid; grid-template-columns: minmax(210px, .7fr) 1.3fr; overflow: hidden; }
+.edition-year { align-content: center; background: var(--wine); color: #e6c486; font: 800 clamp(58px, 9vw, 106px)/1 "Playfair Display"; padding: 42px; text-align: center; }
+.edition-copy { padding: 38px 42px; }
+.edition-copy h3 { font: 700 28px/1.15 "Playfair Display"; margin: 0 0 14px; }
+.edition-copy > p:not(.eyebrow) { color: var(--muted); line-height: 1.65; margin: 0 0 24px; max-width: 600px; }
+.edition-link { color: var(--wine); font-size: 14px; font-weight: 800; text-decoration: none; }
+.edition-link span { margin-left: 8px; }
+
+@media (max-width: 650px) {
+  .edition-card { grid-template-columns: 1fr; }
+  .edition-year { padding: 28px; }
+  .edition-copy { padding: 28px 24px; }
+  .edition-copy h3 { font-size: 25px; }
+}
