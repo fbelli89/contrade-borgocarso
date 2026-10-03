@@ -7,6 +7,7 @@ const defaultData = {
   ],
   matches: [],
   goals: [],
+  editions: [{ year: 2026, champion: null }],
   winner: null
 };
 const matchSchedule = ['10:00', '10:55', '11:50', '15:00', '15:55', '16:50', '18:00'];
@@ -49,6 +50,8 @@ function render(selectedMatchId = byId('matchSelect').value){
   const championBanner=byId('championBanner'), winner=team(data.winner);
   championBanner.hidden=!winner;
   championBanner.innerHTML=winner ? `<p>🏆 Campione del Torneo delle Contrade 2026 🏆</p><img src="${winner.logo}" alt="Logo Contrada ${winner.name}" /><strong>${winner.name}</strong><span>La contrada vincitrice</span>` : '';
+  const editions=data.editions.length ? data.editions : [{year:2026,champion:data.winner}];
+  byId('honourRoll').innerHTML=editions.map(edition=>{const champion=team(edition.champion);return `<article class="honour-roll-entry"><span class="honour-roll-year">${edition.year}</span>${champion ? `<img src="${champion.logo}" alt="Logo Contrada ${champion.name}" /><strong>${champion.name}</strong><small>Contrada vincitrice</small>` : '<strong>In attesa della finale</strong><small>Contrada vincitrice</small>'}</article>`}).join('');
   syncScoreFields();
   syncScorerTeams();
 }
@@ -60,11 +63,12 @@ function openDialog(id){const dialog=byId(id);if(typeof dialog.showModal==='func
 function closeDialog(id){const dialog=byId(id);if(typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open')}
 async function loadRemoteData(){
   if (!supabaseClient) { render(); toast('Modalità anteprima: collega Supabase per pubblicare i dati.'); return; }
-  const [{ data: remoteMatches, error: matchesError },{ data: remoteGoals, error: goalsError },{ data: settings, error: settingsError }]=await Promise.all([supabaseClient.from('matches').select('*').order('id'),supabaseClient.from('goals').select('*').order('id'),supabaseClient.from('tournament_settings').select('champion').eq('id',true).maybeSingle()]);
+  const [{ data: remoteMatches, error: matchesError },{ data: remoteGoals, error: goalsError },{ data: settings, error: settingsError },{ data: remoteEditions, error: editionsError }]=await Promise.all([supabaseClient.from('matches').select('*').order('id'),supabaseClient.from('goals').select('*').order('id'),supabaseClient.from('tournament_settings').select('champion').eq('id',true).maybeSingle(),supabaseClient.from('tournament_editions').select('*').order('year',{ascending:false})]);
   if (matchesError) { console.error(matchesError); render(); toast('Impossibile caricare il torneo. Verifica la configurazione.'); return; }
   data.matches = remoteMatches.map(m => ({ id:m.id, day:m.day, date:m.date, home:m.home, away:m.away, homeScore:m.home_score, awayScore:m.away_score }));
   data.goals=goalsError?[]:remoteGoals;
   data.winner=settingsError ? null : settings?.champion ?? null;
+  data.editions=editionsError || !remoteEditions?.length ? [{year:2026,champion:data.winner}] : remoteEditions;
   render();
 }
 byId('adminTrigger').onclick=()=> { if (!isConfigured) return toast('Configura Supabase prima di accedere.'); if (!supabaseClient) return toast('La connessione a Supabase è stata bloccata dal browser.'); loggedIn ? openDialog('adminDialog') : openDialog('loginDialog'); };
@@ -75,12 +79,12 @@ byId('matchSelect').onchange=syncScoreFields;
 byId('scorerMatch').onchange=syncScorerTeams;
 byId('scorerForm').onsubmit=async e=>{e.preventDefault();const matchId=Number(byId('scorerMatch').value),teamId=byId('scorerTeam').value,player=byId('scorerName').value.trim();if(!matchId||!teamId||!player)return;const {data:goal,error}=await supabaseClient.from('goals').insert({match_id:matchId,team:teamId,player}).select().single();if(error)return toast('Impossibile aggiungere il marcatore.');data.goals.push(goal);render(matchId);e.target.reset();toast('Marcatore aggiunto alla classifica.');};
 byId('deleteGoal').onclick=async()=>{const id=Number(byId('goalSelect').value),goal=data.goals.find(item=>item.id===id);if(!goal)return toast('Seleziona un marcatore da eliminare.');if(!confirm(`Eliminare il gol di ${goal.player}?`))return;const {error}=await supabaseClient.from('goals').delete().eq('id',id);if(error)return toast('Non autorizzato a eliminare il marcatore.');data.goals=data.goals.filter(item=>item.id!==id);render();toast('Marcatore eliminato.');};
-byId('winnerForm').onsubmit=async e=>{e.preventDefault();const tournamentFinal=finalMatch(),winner=byId('winnerTeam').value;if(!tournamentFinal)return toast('Inserisci prima la finale delle ore 18:00.');if(tournamentFinal.homeScore===null)return toast('Salva prima il risultato della finale.');if(winner!==tournamentFinal.home&&winner!==tournamentFinal.away)return toast('Scegli una delle due contrade finaliste.');const {error}=await supabaseClient.from('tournament_settings').upsert({id:true,champion:winner});if(error)return toast('Impossibile assegnare la coppa. Esegui prima la migrazione del database.');data.winner=winner;render();toast(`Coppa assegnata alla Contrada ${team(winner).name}.`);};
+byId('winnerForm').onsubmit=async e=>{e.preventDefault();const tournamentFinal=finalMatch(),winner=byId('winnerTeam').value;if(!tournamentFinal)return toast('Inserisci prima la finale delle ore 18:00.');if(tournamentFinal.homeScore===null)return toast('Salva prima il risultato della finale.');if(winner!==tournamentFinal.home&&winner!==tournamentFinal.away)return toast('Scegli una delle due contrade finaliste.');const {error}=await supabaseClient.from('tournament_settings').upsert({id:true,champion:winner});if(error)return toast('Impossibile assegnare la coppa. Esegui prima la migrazione del database.');data.winner=winner;const edition=data.editions.find(item=>item.year===2026);if(edition)edition.champion=winner;else data.editions.unshift({year:2026,champion:winner});const {error: archiveError}=await supabaseClient.from('tournament_editions').upsert({year:2026,champion:winner});render();toast(archiveError ? `Coppa assegnata alla Contrada ${team(winner).name}. L’albo d’oro sarà salvato dopo la migrazione.` : `Coppa assegnata alla Contrada ${team(winner).name}.`);};
 byId('deleteMatch').onclick=async()=>{const match=selectedMatch();if(!match)return toast('Seleziona una partita da eliminare.');if(!confirm(`Eliminare definitivamente ${team(match.home).name} – ${team(match.away).name}?`))return;const {error}=await supabaseClient.from('matches').delete().eq('id',match.id);if(error)return toast('Non autorizzato a eliminare la partita.');data.matches=data.matches.filter(item=>item.id!==match.id);render();toast('Partita eliminata dal calendario.');};
 byId('calendarForm').onsubmit=async e=>{e.preventDefault();const home=byId('homeTeam').value,away=byId('awayTeam').value,matchIndex=data.matches.length,details=matchDetails(matchIndex);if(matchIndex >= matchSchedule.length)return toast('Il calendario prevede sei partite e una finale.');if(home===away)return toast('Scegli due contrade diverse.');if(matchIndex < 6 && data.matches.some(m=>(m.home===home&&m.away===away)||(m.home===away&&m.away===home)))return toast('Questa partita è già in calendario.');const match={day:details.day,date:details.date,home,away,home_score:null,away_score:null};const {data: inserted,error}=await supabaseClient.from('matches').insert(match).select().single();if(error)return toast('Impossibile aggiungere la partita.');data.matches.push({id:inserted.id,day:inserted.day,date:inserted.date,home:inserted.home,away:inserted.away,homeScore:null,awayScore:null});render(inserted.id);toast(`${details.day} aggiunta al calendario.`);};
 byId('logout').onclick=async()=>{await supabaseClient.auth.signOut();loggedIn=false;closeDialog('adminDialog');toast('Accesso amministratore terminato.')};
 async function init(){
-  if (supabaseClient) { const {data:{session}}=await supabaseClient.auth.getSession(); loggedIn=Boolean(session); supabaseClient.channel('partite-aggiornate').on('postgres_changes',{event:'*',schema:'public',table:'matches'},loadRemoteData).on('postgres_changes',{event:'*',schema:'public',table:'goals'},loadRemoteData).on('postgres_changes',{event:'*',schema:'public',table:'tournament_settings'},loadRemoteData).subscribe(); }
+  if (supabaseClient) { const {data:{session}}=await supabaseClient.auth.getSession(); loggedIn=Boolean(session); supabaseClient.channel('partite-aggiornate').on('postgres_changes',{event:'*',schema:'public',table:'matches'},loadRemoteData).on('postgres_changes',{event:'*',schema:'public',table:'goals'},loadRemoteData).on('postgres_changes',{event:'*',schema:'public',table:'tournament_settings'},loadRemoteData).on('postgres_changes',{event:'*',schema:'public',table:'tournament_editions'},loadRemoteData).subscribe(); }
   loadRemoteData();
 }
 init();

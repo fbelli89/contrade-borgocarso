@@ -6,6 +6,17 @@
 .edition-copy > p:not(.eyebrow) { color: var(--muted); line-height: 1.65; margin: 0 0 24px; max-width: 600px; }
 .edition-link { color: var(--wine); font-size: 14px; font-weight: 800; text-decoration: none; }
 .edition-link span { margin-left: 8px; }
+.honour-roll-heading { margin: 42px 0 18px; }
+.honour-roll-heading .eyebrow { margin-bottom: 8px; }
+.honour-roll-heading h3 { font: 700 27px "Playfair Display"; margin: 0; }
+.honour-roll { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.honour-roll-entry { align-items: center; background: var(--paper); border: 1px solid var(--line); display: grid; grid-template-columns: auto 42px 1fr; gap: 12px; padding: 17px; }
+.honour-roll-year { color: var(--wine); font: 800 29px "Playfair Display"; }
+.honour-roll-entry img { height: 42px; object-fit: contain; width: 42px; }
+.honour-roll-entry strong { font-size: 15px; }
+.honour-roll-entry small { color: var(--muted); font-size: 11px; grid-column: 3; margin-top: -11px; }
+.honour-roll-entry strong:first-of-type:nth-last-child(2) { grid-column: 2 / 4; }
+.honour-roll-entry strong:first-of-type:nth-last-child(2) + small { grid-column: 2 / 4; }
 
 @media (max-width: 650px) {
   .edition-card { grid-template-columns: 1fr; }

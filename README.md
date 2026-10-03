@@ -18,6 +18,8 @@ Prima del sorteggio il calendario è volutamente vuoto. Dopo l’estrazione, apr
 
 Al termine della finale, salva il risultato e nella sezione **Proclama la contrada vincitrice** seleziona una delle due finaliste: sul sito apparirà il banner del campione con la coppa. Se il database era già stato creato prima di questa funzione, esegui una volta [supabase/migration-tournament-winner.sql](supabase/migration-tournament-winner.sql) nel SQL Editor di Supabase.
 
+Per rendere persistente l’**Albo d’oro** e conservare un vincitore per ogni futura edizione, esegui una volta anche [supabase/migration-honour-roll.sql](supabase/migration-honour-roll.sql) nel SQL Editor di Supabase.
+
 ## Personalizzazione
 
 Le quattro contrade e i colori iniziali sono definiti in `app.js`. Per modificare il calendario, aggiorna le righe nella tabella `matches` dal **Table Editor** di Supabase.
